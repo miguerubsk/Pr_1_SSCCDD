@@ -1,8 +1,9 @@
+[![logo](https://www.gnu.org/graphics/gplv3-127x51.png)](https://choosealicense.com/licenses/gpl-3.0/)
 # Primera Práctica
 
 ## Resolución con semáforos
 
-### Problema a resolver
+#### Problema a resolver
 
 Se tiene un sistema con un número indeterminado de procesos productores y consumidores
 donde la operación de consumir es más lenta que la de producir, y se trata de que los consumidores
@@ -22,9 +23,30 @@ Se tiene capacidad para almacenar **NA** y **NB** datos de clase **A** o **B**, 
 La lectura de los datos por parte de los consumidores debe hacerse respetando el orden en
 que han sido depositados por los productores
 
-### Proceso general:
+#### Proceso general:
 
 Los elementos a tener en cuenta son:
 - Los **Datos** tienen un id y tipoDato, que será **A** o **B**.
 - Los **Productores** de datos crean entre 1 y 3 datos en cada producción y los ponen a disposición de los Consumidores. Un productor tarda en producir un dato un tiempo aleatorio entre MIN_TIEMPO_PRODUCCIÓN y MAX_TIEMPO_PRODUCCIÓN. Los datos se consumen en el orden en que fueron depositados en el buffer, según su tipo.
 - Los **Consumidores** de datos toman un dato de los que hay disponibles y los procesan en un tiempo MIN_TIEMPO_CONSUMO + VARIACIÓN_TIEMPO. Hay 3 tipos de **Consumidores**: los que consumen datos de tipo **A**, los que consumen datos de tipo **B** y los que consumen de ambos.
+- Se construirán **NUM_PRODUCTORES** Productores de datos.
+- Se construirán **NUM_CONSUMIDORES** Consumidores de datos.
+- Cada productor de datos construirá un número aleatorio de datos.
+- Cuando los Productores han generado todos sus datos, terminan su ejecución.
+- Cuando no quedan datos en la lista y los Productores han terminado su ejecución, los Consumidores interrumpirán su ejecución.
+
+### Análisis del problema
+
+Estructuras de datos, variables compartidas y procedimientos necesarios.
+
+#### Variables compartidas
+
+- `buffer: Cola<Datos>`: buffer de datos de tipos A y B.
+- `indexInsert: Cola<Registro>`: buffer de registros.
+- `numA: integer` Número de datos de tipo A.
+- `numB: integer` Número de datos de tipo B.
+- `MAX_DATOS: integer` Número máximo de datos.
+- `esperaHueco: Semáforo` Semáforo para impedir que se añadan datos a la cola si está llena.
+- `esperaDato: Semáforo` Semáforo para controlar que no se saque ningún dato de la cola de datos si está vacía.
+- `mutexBuffer: Mutex` Mutex para controlar que la escritura/lectura en la cola de datos se haga en exclusión mútua.
+- `mutexMain: Mutex` Mutex para impedir que los consumidores accedan a la vez a la cola de datos.
