@@ -50,3 +50,45 @@ Estructuras de datos, variables compartidas y procedimientos necesarios.
 - `esperaDato: Semáforo` Semáforo para controlar que no se saque ningún dato de la cola de datos si está vacía.
 - `mutexBuffer: Mutex` Mutex para controlar que la escritura/lectura en la cola de datos se haga en exclusión mútua.
 - `mutexMain: Mutex` Mutex para impedir que los consumidores accedan a la vez a la cola de datos.
+
+#### Tipos de Datos
+Tipos de datos abstractos para una correcta implementación posterior.
+- TAD Dato. 
+    - Campos:
+        - `idDato: integer`.
+        - `tipoDato: char` (A o B).
+- TAD Registro. 
+    - Campos:
+        - `tipoDato: char` (A o B).
+        - `numRafaga: integer`.
+    - Operaciones:
+        - `Registro()`. Crea un Registro.
+- TAD Productor.
+    - Campos:
+        - `idProductor: integer` Identificador del Productor:
+        - `listaDatos: array<Datos>` Lista con la ráfaga de Datos.
+    - Operaciones:
+        - `producir()` Genera los Datos.
+        - `generarRáfaga()` Genera una ráfaga de Datos.
+- TAD Consumidor.
+    - Campos:
+        - `idConsumidor: integer` Identificador del Consumidor.
+        - `tipo: Char` Tipo de Datos que consume.
+        - `registro: Registro` Siguiente registro disponible.
+    - Operaciones:
+        - `consumir()` Lee y procesa Datos. Ejecución.
+- TAD Hilo Sistema.
+    - Datos Compartidos:
+        - `Buffer: cola<Datos>` Buffer de Datos de tipo A/B.
+        - `indexRegistros: cola<Registro>` Buffer de Registro.
+        - `contA: integer`, `contB: integer`, `MAX_DATOS: integer`.
+        - `esperaHueco: semáforo`.
+        - `esperaDato: semáforo`.
+        - `mutexBuffer: semáforo`.
+        - `mutexMain: semáforo`.
+    - Operaciones:
+        - `ejecutaProductores()` Crea los Productores del Sistema.
+        - `ejecutaConsumidores()` Crea los Consumidores del Sistema.
+        - `esperaFin()` Espera final de ejecución de los procesos.
+        - `finalizaProductores()` Finaliza los Productores del Sistema.
+        - `finalizaConsumidores()` Finaliza los Consumidores del Sistema.
