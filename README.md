@@ -109,3 +109,96 @@ Para cada proceso **Consumidor** necesitamos los procedimientos:
 Se presenta el diseño de la práctica mediante pseudocódigo donde se resolverá la
 ejecución necesaria para el procesamiento de cada uno de los procesos generados, y finalice la aplicación de forma adecuada.
 ##### Productores
+```
+func crearProductor
+ 	idProd = nuevoIDProdunico()
+ 	tipoP = nuevotipoAoB()  
+    duracion = tiempo + var_dur 
+    datosger = lista vacía
+Fin func
+```
+```
+func ejecConsumidor
+ 	proddatos();
+Fin func
+```
+```
+func proddatos
+    para n = 1 hasta num_rafagas_aleatorio
+        numrafagadatos = numAleatorio(1 a 3)
+        nr = 1
+        Mientras nr menor que numrafagadatos
+            esperar duracion
+            dato = dato(tipoP)
+            datosger.add(dato)
+            nr++
+        fin Mientras 
+        bufferMutex.wait()
+        Mientras datosger.tam() + nA + nB mayor que max
+            bufferMutex.signal()
+            sHueco.wait()
+            bufferMutex.wait()
+        fin Mientras
+        Mientras entero j = 1 menor que datosger.tam()
+            Buffer.add(datosger.get(j))
+        fin Mientras
+        Insercion i = Insercion(datosger.tam(), tipo)
+        si tipo igual a 'A'
+            nA += datosger.tam()
+        fin si
+        si tipo igual a 'B'
+            nB += datosger.tam()
+        fin si
+    fin para
+Fin func
+```
+#### Consumidores
+```
+func crearConsumidor  
+    idCons = nuevoIDConsunico()  
+    tipoCons = nuevotipoAoBoAB()  
+    duracion = tiempo + var_dur  
+    insercions = vacio  
+Fin func
+```
+```
+func ejecConsumidor
+    mientras productoresactivos o buffernovacio
+ 	    consdatos();
+    fin mientras
+Fin func
+```
+```
+func consdatos
+    mainMutex.wait()
+    mientras nRafaga está vacío
+        mainMutex.signal()
+        sDatos.wait()
+    fin mientras
+    insercions = nRafaga.top()
+    mientras tipo no AB y tipo distinto de insercions tipoI
+        mainMutex.signal()
+        sDatos.wait()
+        insercions = nRafaga.top()
+    fin mientras
+    bufferMutex.wait()
+    para i igual a 1 y i menor o igual que insercions.tamI con i++
+        esperar duracion
+        buffer.get();
+    fin para
+    si insercions.tipoI igual a 'A'
+        nA = nA - insercions.tamI
+    fin si
+    si insercions.tipoI = 'B'
+        nB = nB - insercions.tamI
+    fin si
+    nRafaga.get()
+    bufferMutex.signal()
+    sDatos.signal()
+    mainMutex.signal()
+    sHueco.signal()  
+Fin func
+```
+Además, existen elementos que comparten características y patrones de comportamiento. Así, los elementos productores, **ProductorA** y **ProductorB**, pueden agruparse mediante la generalización **Productor**. Además, **ConsumidorA** y **ConsumidorB** son especificaciones de **ConsumidorAB**, por lo tanto, esta última pasa a llamarse **Consumidor**, y se convierte así en generalización de las otras dos. **DatoA** y **DatoB** harán lo mismo agrupándose en **Dato**.
+
+Esta apreciación final de diseño, será desarrollada plenamente en la posterior implementación y especificación del problema.
