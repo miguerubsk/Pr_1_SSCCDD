@@ -101,10 +101,11 @@ Para la aplicación del Sistema necesitammos utilizar los siguientes procedimien
 Para cada proceso **Dato** necesitamos utilizar los siguientes procedimientos:
 - `Dato()`: crea un dato.
 Para cada proceso **Productor** necesitamos los siguientes procedimientos:
-- `prduce()`: coloca la ráfaga de datos en el buffer. Ejecución: hilos de productores.
+- `produce()`: coloca la ráfaga de datos en el buffer. Ejecución: hilos de productores.
 - `produceRafaga(Dato)`: crea un número de datos aleatorio entre 1 y 3.
 Para cada proceso **Consumidor** necesitamos los procedimientos:
 - `consume()`: Lee una ráfaga de datos del buffer correspondiente según el tipo. Ejecución de hilos consumidores.
 ### 2. Diseño
 Se presenta el diseño de la práctica mediante pseudocódigo donde se resolverá la
 ejecución necesaria para el procesamiento de cada uno de los procesos generados, y finalice la aplicación de forma adecuada.
+##### Productores
