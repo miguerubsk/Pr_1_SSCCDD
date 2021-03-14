@@ -35,14 +35,14 @@ Los elementos a tener en cuenta son:
 - Cuando los Productores han generado todos sus datos, terminan su ejecución.
 - Cuando no quedan datos en la lista y los Productores han terminado su ejecución, los Consumidores interrumpirán su ejecución.
 
-### Análisis del problema
+### 1. Análisis del problema
 
 Estructuras de datos, variables compartidas y procedimientos necesarios.
 
 #### Variables compartidas
 
 - `buffer: Cola<Datos>`: buffer de datos de tipos A y B.
-- `indexInsert: Cola<Registro>`: buffer de registros.
+- `indexRegistros: Cola<Registro>`: buffer de registros.
 - `numA: integer` Número de datos de tipo A.
 - `numB: integer` Número de datos de tipo B.
 - `MAX_DATOS: integer` Número máximo de datos.
@@ -92,3 +92,19 @@ Tipos de datos abstractos para una correcta implementación posterior.
         - `esperaFin()` Espera final de ejecución de los procesos.
         - `finalizaProductores()` Finaliza los Productores del Sistema.
         - `finalizaConsumidores()` Finaliza los Consumidores del Sistema.
+#### Procedimientos
+Para la aplicación del Sistema necesitammos utilizar los siguientes procedimientos:
+- `crearProceso(Productores, Consumidores)`: Creará un número aleatorio de procesos Productor y Consumidor.
+- `ejecutarProceso(Productores, Consumidores)`: Lanzará la ejecución de los procesos correspondientes.
+- `esperaFin(Datos, Consumidores)`: esperará a que todos los datos hayan sido consumidos.
+- `finalizarProcesos(Productores, Consumidores)`: Finaliza los procesos del sistema.
+Para cada proceso **Dato** necesitamos utilizar los siguientes procedimientos:
+- `Dato()`: crea un dato.
+Para cada proceso **Productor** necesitamos los siguientes procedimientos:
+- `prduce()`: coloca la ráfaga de datos en el buffer. Ejecución: hilos de productores.
+- `produceRafaga(Dato)`: crea un número de datos aleatorio entre 1 y 3.
+Para cada proceso **Consumidor** necesitamos los procedimientos:
+- `consume()`: Lee una ráfaga de datos del buffer correspondiente según el tipo. Ejecución de hilos consumidores.
+### 2. Diseño
+Se presenta el diseño de la práctica mediante pseudocódigo donde se resolverá la
+ejecución necesaria para el procesamiento de cada uno de los procesos generados, y finalice la aplicación de forma adecuada.
