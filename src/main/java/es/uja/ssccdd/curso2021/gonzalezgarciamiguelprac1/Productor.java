@@ -24,6 +24,7 @@ import static es.uja.ssccdd.curso2021.gonzalezgarciamiguelprac1.Constantes.TipoD
 import static es.uja.ssccdd.curso2021.gonzalezgarciamiguelprac1.Constantes.VARIACION_TIEMPO;
 import static es.uja.ssccdd.curso2021.gonzalezgarciamiguelprac1.Constantes.aleatorio;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CyclicBarrier;
@@ -37,10 +38,10 @@ import java.util.logging.Logger;
  *
  * @author Miguel González García
  */
-public class Productor implements Callable<ArrayList<Dato>> {
+public class Productor implements Callable<List<Dato>> {
 
     private final TipoDato tipoDato;
-    private final ArrayList<Dato> racha;
+    private final List<Dato> racha;
     private final BufferSelectivo buffer;
     private final ReentrantLock mutexBuffer;
     private final Semaphore emptySemBufferA;
@@ -74,7 +75,7 @@ public class Productor implements Callable<ArrayList<Dato>> {
     }
 
     @Override
-    public ArrayList<Dato> call() throws Exception {
+    public List<Dato> call() throws Exception {
         int numRacha = MIN_RACHA + aleatorio.nextInt(MAX_RACHA - MIN_RACHA);
         for (int i = 0; i < numRacha; i++) {
             try {
