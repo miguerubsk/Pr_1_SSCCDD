@@ -22,6 +22,7 @@ import static es.uja.ssccdd.curso2021.gonzalezgarciamiguelprac1.Constantes.MIN_C
 import es.uja.ssccdd.curso2021.gonzalezgarciamiguelprac1.Constantes.*;
 import static es.uja.ssccdd.curso2021.gonzalezgarciamiguelprac1.Constantes.aleatorio;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
@@ -33,20 +34,21 @@ import java.util.logging.Logger;
  *
  * @author Miguel González García
  */
-public class Consumidor implements Callable<ArrayList<Dato>> {
+public class Consumidor implements Callable<List<Dato>> {
 
     private static Boolean terminadosProductores = false;
 
     private final TipoDato tipoDato;
-    private final ArrayList<Dato> racha;
+    private final List<Dato> racha;
     private final BufferSelectivo buffer;
+    private final ReentrantLock mainMutex;
     private final ReentrantLock mutexBuffer;
     private final Semaphore emptySemBufferA;
     private final Semaphore fillSemBufferA;
     private final Semaphore emptySemBufferB;
     private final Semaphore fillSemBufferB;
 
-    public Consumidor(TipoDato tipoDato, BufferSelectivo buffer, ReentrantLock mutexBuffer, Semaphore emptySemBufferA, Semaphore fillSemBufferA, Semaphore emptySemBufferB, Semaphore fillSemBufferB) {
+    public Consumidor(TipoDato tipoDato, BufferSelectivo buffer, ReentrantLock mainMutex, ReentrantLock mutexBuffer, Semaphore emptySemBufferA, Semaphore fillSemBufferA, Semaphore emptySemBufferB, Semaphore fillSemBufferB) {
         this.tipoDato = tipoDato;
         this.buffer = buffer;
         this.racha = new ArrayList<Dato>();
@@ -55,12 +57,88 @@ public class Consumidor implements Callable<ArrayList<Dato>> {
         this.fillSemBufferA = fillSemBufferA;
         this.emptySemBufferB = emptySemBufferB;
         this.fillSemBufferB = fillSemBufferB;
+        this.mainMutex = mainMutex;
     }
 
     @Override
-    public ArrayList<Dato> call() throws Exception {
+    public List<Dato> call() throws Exception {
 
-        return racha;
+        Boolean tengoDato, rachaTerminada;
+
+        while (true) {
+            tengoDato = false;
+            rachaTerminada = false;
+            try {
+                mainMutex.lock();
+                if (tipoDato == A) {
+                    if (buffer.getNumA() != 0) {
+                        emptySemBufferA.acquire();
+                        mutexBuffer.lock();
+                        while (!rachaTerminada) {
+                            rachaTerminada = extraerDato();
+                        }
+                        mutexBuffer.unlock();
+                        fillSemBufferA.release();
+                        tengoDato = true;
+                    } else if (terminadosProductores) {
+                        mainMutex.unlock();
+                        return racha;
+                    }
+                }
+                if (tipoDato == B) {
+                    if (buffer.getNumB() != 0) {
+                        emptySemBufferB.acquire();
+                        mutexBuffer.lock();
+                        while (!rachaTerminada) {
+                            rachaTerminada = extraerDato();
+                        }
+                        mutexBuffer.unlock();
+                        fillSemBufferB.release();
+                        tengoDato = true;
+                    } else if (terminadosProductores) {
+                        mainMutex.unlock();
+                        return racha;
+                    }
+                }
+                if (tipoDato == AB) {
+                    if (buffer.getNumA() != 0) {
+                        emptySemBufferA.acquire();
+                        mutexBuffer.lock();
+                        while (!rachaTerminada) {
+                            rachaTerminada = extraerDato();
+                        }
+                        mutexBuffer.unlock();
+                        fillSemBufferA.release();
+                        tengoDato = true;
+                    } else if (buffer.getNumB() != 0) {
+                        emptySemBufferB.acquire();
+                        mutexBuffer.lock();
+                        while (!rachaTerminada) {
+                            rachaTerminada = extraerDato();
+                        }
+                        mutexBuffer.unlock();
+                        fillSemBufferB.release();
+                        tengoDato = true;
+                    } else if (terminadosProductores) {
+                        mainMutex.unlock();
+                        return racha;
+                    }
+                }
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Consumidor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            mainMutex.unlock();
+            if(tengoDato){
+                consumirDatos();
+            } else {
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Consumidor.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+
     }
 
     /**
