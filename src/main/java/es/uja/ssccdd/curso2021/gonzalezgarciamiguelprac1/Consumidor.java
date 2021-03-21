@@ -35,6 +35,8 @@ import java.util.logging.Logger;
  */
 public class Consumidor implements Callable<ArrayList<Dato>> {
 
+    private static Boolean terminadosProductores = false;
+
     private final TipoDato tipoDato;
     private final ArrayList<Dato> racha;
     private final BufferSelectivo buffer;
@@ -55,28 +57,22 @@ public class Consumidor implements Callable<ArrayList<Dato>> {
         this.fillSemBufferB = fillSemBufferB;
     }
 
-    
-    
-
     @Override
     public ArrayList<Dato> call() throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        return racha;
     }
 
     /**
      * @brief extrae una racha de datos del buffer
      */
-    private void extraerDatos() {
-        racha.clear();
+    private boolean extraerDato() {
         if (tipoDato != AB) {
-            do {
-                racha.add(buffer.get(tipoDato));
-            } while (!racha.get(racha.size() - 1).isFinRacha());
+            racha.add(buffer.get(tipoDato));
         } else {
-            do {
-                racha.add(buffer.get());
-            } while (!racha.get(racha.size() - 1).isFinRacha());
+            racha.add(buffer.get());
         }
+        return racha.get(racha.size() - 1).isFinRacha();
     }
 
     /**
@@ -96,4 +92,7 @@ public class Consumidor implements Callable<ArrayList<Dato>> {
         }
     }
 
+    public static void switchTerminadosProductores() {
+        terminadosProductores = !terminadosProductores;
+    }
 }
