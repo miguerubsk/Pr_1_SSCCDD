@@ -41,8 +41,8 @@ public interface Constantes {
 
     public static final int MIN_RACHA = 1;
     public static final int MAX_RACHA = 3;
-    public static final int MAX_DATOS_A = 50;
-    public static final int MAX_DATOS_B = 50;
+    public static final int MAX_DATOS_A = 5;
+    public static final int MAX_DATOS_B = 5;
     public static final int MAX_DATOS = MAX_DATOS_A + MAX_DATOS_B;
     public static final int MIN_PRODUCIR = 2;
     public static final int MIN_COMSUMIR = 3;
