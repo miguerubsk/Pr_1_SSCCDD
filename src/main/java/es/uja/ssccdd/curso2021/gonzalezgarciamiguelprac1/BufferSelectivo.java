@@ -28,12 +28,20 @@ public class BufferSelectivo {
     private final LinkedList<Dato> buffer;
     private int numA, numB;
 
+    /**
+     * @brief Inicializa el buffer
+     */
     public BufferSelectivo() {
         this.buffer = new LinkedList<>();
         this.numA = 0;
         this.numB = 0;
     }
 
+    /**
+     * @brief añade un dato a la cola del buffer
+     * @param dato dato que se quiere insertar en el buffer
+     * @return true si se ha insertado
+     */
     public boolean add(Dato dato) {
         switch (dato.getTipoDato()) {
             case A:
@@ -46,6 +54,10 @@ public class BufferSelectivo {
         return this.buffer.offer(dato);
     }
 
+    /**
+     * @brief saca un dato de la cola
+     * @return dato que se ha obtenido
+     */
     public Dato get() {
         Dato aux = this.buffer.poll();
         switch (aux.getTipoDato()) {
@@ -60,8 +72,7 @@ public class BufferSelectivo {
     }
 
     /**
-     * devuelve el primer dato del tipo especificado
-     *
+     * @brief Devuelve el primer dato del tipo especificado
      * @param tipoDato tipo del dato que se busca
      * @return el dato o null si no ha encontrado
      */
@@ -87,12 +98,27 @@ public class BufferSelectivo {
         return aux;
     }
 
+    /**
+     * 
+     * @return número de datos de tipo A en el buffer
+     */
     public int getNumA() {
         return numA;
     }
 
+    /**
+     * 
+     * @return número de datos de tipo B en el buffer
+     */
     public int getNumB() {
         return numB;
     }
     
+    /**
+     * 
+     * @return cantidad total de datos en el buffer
+     */
+    public int size(){
+        return numA + numB;
+    }
 }

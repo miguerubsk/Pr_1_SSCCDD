@@ -14,16 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package es.uja.ssccdd.curso2021.gonzalezgarciamiguelprac1;
 
-import static es.uja.ssccdd.curso2021.gonzalezgarciamiguelprac1.Constantes.TipoDato;
+import static es.uja.ssccdd.curso2021.gonzalezgarciamiguelprac1.Constantes.TipoDato.*;
 import static es.uja.ssccdd.curso2021.gonzalezgarciamiguelprac1.Constantes.VARIACION_TIEMPO;
 import static es.uja.ssccdd.curso2021.gonzalezgarciamiguelprac1.Constantes.MIN_COMSUMIR;
+import es.uja.ssccdd.curso2021.gonzalezgarciamiguelprac1.Constantes.*;
 import static es.uja.ssccdd.curso2021.gonzalezgarciamiguelprac1.Constantes.aleatorio;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,26 +34,55 @@ import java.util.logging.Logger;
  * @author Miguel González García
  */
 public class Consumidor implements Callable<ArrayList<Dato>> {
+
     private final TipoDato tipoDato;
     private final ArrayList<Dato> racha;
     private final BufferSelectivo buffer;
+    private final ReentrantLock mutexBuffer;
+    private final Semaphore emptySemBufferA;
+    private final Semaphore fillSemBufferA;
+    private final Semaphore emptySemBufferB;
+    private final Semaphore fillSemBufferB;
 
-    public Consumidor(TipoDato tipoDato, BufferSelectivo buffer) {
+    public Consumidor(TipoDato tipoDato, BufferSelectivo buffer, ReentrantLock mutexBuffer, Semaphore emptySemBufferA, Semaphore fillSemBufferA, Semaphore emptySemBufferB, Semaphore fillSemBufferB) {
         this.tipoDato = tipoDato;
-        this.racha = new ArrayList<Dato>();
         this.buffer = buffer;
+        this.racha = new ArrayList<Dato>();
+        this.mutexBuffer = mutexBuffer;
+        this.emptySemBufferA = emptySemBufferA;
+        this.fillSemBufferA = fillSemBufferA;
+        this.emptySemBufferB = emptySemBufferB;
+        this.fillSemBufferB = fillSemBufferB;
     }
+
+    
+    
 
     @Override
     public ArrayList<Dato> call() throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    private void extraerDatos(){
-        
+
+    /**
+     * @brief extrae una racha de datos del buffer
+     */
+    private void extraerDatos() {
+        racha.clear();
+        if (tipoDato != AB) {
+            do {
+                racha.add(buffer.get(tipoDato));
+            } while (!racha.get(racha.size() - 1).isFinRacha());
+        } else {
+            do {
+                racha.add(buffer.get());
+            } while (!racha.get(racha.size() - 1).isFinRacha());
+        }
     }
-    
-    private void consumirDatos(){
+
+    /**
+     * @brief Consume la racha de datos que ha extraido
+     */
+    private void consumirDatos() {
         for (int i = 0; i < racha.size(); i++) {
             try {
                 TimeUnit.SECONDS.wait(MIN_COMSUMIR + aleatorio.nextInt(VARIACION_TIEMPO));
@@ -60,8 +91,9 @@ public class Consumidor implements Callable<ArrayList<Dato>> {
             }
             racha.remove(i);
         }
-        if(!racha.isEmpty())
+        if (!racha.isEmpty()) {
             racha.clear();
+        }
     }
-    
+
 }

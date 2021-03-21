@@ -33,10 +33,18 @@ public class Dato {
         this.finRacha = finRacha;
     }
 
+    /**
+     * 
+     * @return el tipo de dato
+     */
     public TipoDato getTipoDato() {
         return tipoDato;
     }
 
+    /**
+     * 
+     * @return true si el dato es el último de la racha que lo generó y false si no lo es
+     */
     public boolean isFinRacha() {
         return finRacha;
     }

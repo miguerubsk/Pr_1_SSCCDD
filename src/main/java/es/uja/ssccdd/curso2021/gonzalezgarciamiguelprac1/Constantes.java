@@ -47,5 +47,7 @@ public interface Constantes {
     public static final int MIN_PRODUCIR = 2;
     public static final int MIN_COMSUMIR = 3;
     public static final int VARIACION_TIEMPO = 5;
+    public static final int NUM_PRODUCTORES = 4;
+    public static final int NUM_CONSUMIDORES = 3;
     
 }
