@@ -171,6 +171,6 @@ public class Consumidor implements Callable<List<Dato>> {
     }
 
     public static void switchTerminadosProductores() {
-        terminadosProductores = !terminadosProductores;
+        terminadosProductores = true;
     }
 }
