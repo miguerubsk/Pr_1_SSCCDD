@@ -20,7 +20,6 @@ import static es.uja.ssccdd.curso2021.gonzalezgarciamiguelprac1.Constantes.MAX_D
 import static es.uja.ssccdd.curso2021.gonzalezgarciamiguelprac1.Constantes.MAX_DATOS_B;
 import static es.uja.ssccdd.curso2021.gonzalezgarciamiguelprac1.Constantes.NUM_CONSUMIDORES;
 import static es.uja.ssccdd.curso2021.gonzalezgarciamiguelprac1.Constantes.NUM_PRODUCTORES;
-import es.uja.ssccdd.curso2021.gonzalezgarciamiguelprac1.Constantes.TipoDato;
 import static es.uja.ssccdd.curso2021.gonzalezgarciamiguelprac1.Constantes.TipoDato.A;
 import static es.uja.ssccdd.curso2021.gonzalezgarciamiguelprac1.Constantes.TipoDato.AB;
 import static es.uja.ssccdd.curso2021.gonzalezgarciamiguelprac1.Constantes.TipoDato.B;
