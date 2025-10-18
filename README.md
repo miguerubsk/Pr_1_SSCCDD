@@ -1,4 +1,7 @@
 [![logo](https://www.gnu.org/graphics/gplv3-127x51.png)](https://choosealicense.com/licenses/gpl-3.0/)
+<br>
+[![Build and test with Maven](https://github.com/miguerubsk/Pr_1_SSCCDD/actions/workflows/maven.yml/badge.svg)](https://github.com/miguerubsk/Pr_1_SSCCDD/actions/workflows/maven.yml)
+[![CodeQL Advanced](https://github.com/miguerubsk/Pr_1_SSCCDD/actions/workflows/codeql.yml/badge.svg)](https://github.com/miguerubsk/Pr_1_SSCCDD/actions/workflows/codeql.yml)
 # Primera Práctica
 
 ## Resolución con semáforos
