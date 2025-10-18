@@ -79,6 +79,7 @@ public class Productor implements Callable<List<Dato>> {
         int numRacha = MIN_RACHA + aleatorio.nextInt(MAX_RACHA - MIN_RACHA);
         for (int i = 0; i < numRacha; i++) {
             try {
+                System.out.println("Productor tipo " + this.tipoDato + " produciendo nuevo dato" );
                 TimeUnit.SECONDS.wait(MIN_PRODUCIR + aleatorio.nextInt(VARIACION_TIEMPO));
             } catch (InterruptedException ex) {
                 Logger.getLogger(Productor.class.getName()).log(Level.SEVERE, null, ex);

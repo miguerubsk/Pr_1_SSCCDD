@@ -36,6 +36,20 @@ public interface Constantes {
         private TipoDato(int valor){
             this.valor = valor;
         }
+
+        @Override
+        public String toString() {
+            switch(valor){
+                case 0:
+                    return "A";
+                case 1:
+                    return "B";
+                default:
+                    return "AB";
+            }
+        }
+        
+        
         
     }
 
